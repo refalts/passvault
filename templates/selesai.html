@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2 class="text-center">Detail Pengajuan</h2>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title">NIK: {{ pengajuan.nik }}</h5>
+        <p><strong>Nama:</strong> {{ pengajuan.nama }}</p>
+        <p><strong>Alamat:</strong> {{ pengajuan.alamat }}</p>
+        <p><strong>Tempat Lahir:</strong> {{ pengajuan.tempat_lahir }}</p>
+        <p><strong>Tanggal Lahir:</strong> {{ pengajuan.tanggal_lahir }}</p>
+        <p><strong>Email:</strong> {{ pengajuan.email }}</p>
+        <p><strong>Nomor Telepon:</strong> {{ pengajuan.nomor_telepon }}</p>
+        <p><strong>Status:</strong> {{ pengajuan.status }}</p>
+        <p><strong>Tanggal Pengajuan:</strong> {{ pengajuan.created_at }}</p>
+
+        <h5 class="mt-4">Berkas yang Diunggah</h5>
+        <p><strong>KTP:</strong> 
+            {% if pengajuan.ktp_file_path %}
+                <a href="{{ pengajuan.ktp_file_path }}" target="_blank">Lihat KTP</a>
+            {% else %}
+                Tidak ada berkas KTP yang diunggah.
+            {% endif %}
+        </p>
+
+        <!-- Form untuk Menyelesaikan Status -->
+        {% if pengajuan.status != 'Selesai' %}
+        <form action="/admin/selesai/{{ pengajuan.id }}" method="POST">
+            <div class="alert alert-warning" role="alert">
+                Apakah Anda yakin ingin mengubah status pengajuan ini menjadi <strong>Selesai</strong>?
+            </div>
+            <button type="submit" class="btn btn-success">Tandai Sebagai Selesai</button>
+        </form>
+        {% else %}
+        <div class="alert alert-success" role="alert">
+            Pengajuan ini telah selesai.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

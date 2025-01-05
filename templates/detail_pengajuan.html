@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2 class="text-center">Detail Pengajuan</h2>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title">NIK: {{ pengajuan.nik }}</h5>
+        <p><strong>Nama:</strong> {{ pengajuan.nama }}</p>
+        <p><strong>Alamat:</strong> {{ pengajuan.alamat }}</p>
+        <p><strong>Tempat Lahir:</strong> {{ pengajuan.tempat_lahir }}</p>
+        <p><strong>Tanggal Lahir:</strong> {{ pengajuan.tanggal_lahir }}</p>
+        <p><strong>Email:</strong> {{ pengajuan.email }}</p>
+        <p><strong>Nomor Telepon:</strong> {{ pengajuan.nomor_telepon }}</p>
+        <p><strong>Status:</strong> {{ pengajuan.status }}</p>
+        <p><strong>Tanggal Pengajuan:</strong> {{ pengajuan.created_at }}</p>
+
+        <h5 class="mt-4">Berkas yang Diunggah</h5>
+        <p><strong>KTP:</strong> 
+            {% if secure_ktp_file_url %}
+                <p>KTP File: <a href="{{ secure_ktp_file_url }}" target="_blank">Lihat KTP</a></p>
+            {% else %}
+                <p>KTP File: Tidak tersedia.</p>
+            {% endif %}
+
+        </p>
+
+        <!-- Form untuk Mengubah Status -->
+        <form action="/admin/detail_pengajuan/{{ pengajuan.id }}" method="POST">
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="Menunggu Verifikasi" {% if pengajuan.status == 'Menunggu Verifikasi' %}selected{% endif %}>Menunggu Verifikasi</option>
+                    <option value="Telah Diverifikasi" {% if pengajuan.status == 'Telah Diverifikasi' %}selected{% endif %}>Telah Diverifikasi</option>
+                    <option value="Selesai" {% if pengajuan.status == 'Selesai' %}selected{% endif %}>Selesai</option>
+                </select>
+            </div>
+
+            {% if pengajuan.status == 'Menunggu Verifikasi' %}
+            <div class="mb-3">
+                <label for="tanggal_jadwal_foto" class="form-label">Tanggal Jadwal Foto</label>
+                <input type="date" class="form-control" name="tanggal_jadwal_foto" required>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Update Status</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
